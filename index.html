@@ -27,13 +27,16 @@
           <div class="addition-block">
             <label><input type="checkbox" id="check-delivery">Довоз</label>
             <label><input type="checkbox" id="check-MZL">Груз в Маньчжурии</label>
-            <label><input type="checkbox" id="check-adr">ADR авто</label>
-            <label><input type="checkbox" id="check-adr9">ADR груз (2 цены)</label>
+            <label><input type="checkbox" id="check-brand">Бренд / сокрытие</label>
           </div>
           <div class="addition-block">
             <label><input type="checkbox" id="check-dimensions">Нет точных размеров</label>
             <label><input type="checkbox" id="check-stackable">Считал как штаб (✅)</label>
             <label><input type="checkbox" id="check-non-stackable">Считал как не штаб (❌)</label>
+          </div>
+          <div class="addition-block">
+            <label><input type="checkbox" id="check-adr">ADR авто (☢️)</label>
+            <label><input type="checkbox" id="check-adr9">ADR груз (☢️) 2 цены</label>
             <label><input type="checkbox" id="check-temperature">Температурный режим (🌡️)</label>
           </div>
           <div class="relevance-block">
@@ -189,6 +192,12 @@
         }
       }
       if (document.getElementById('check-dimensions').checked) { lines.push("* Ставка ориентировочная, так как нет точных размеров груза. Когда появятся размеры, ставка будет пересчитана."); }
+      if (document.getElementById('check-brand').checked) {
+        // lines.push("* +20000 CNY к текущей ставке за оформление официальной лицензии, если отправителю необходимо вернуть НДС.");
+        // lines.push("* +3000 CNY к текущей ставке за сокрытие экспортной декларации, если отправитель согласен не возвращать налог.");
+        lines.push("* + 20 000 CNY к базовой ставке за оформление экспортной лицензии (с возмещением НДС для отправителя).");
+        lines.push("* + 3 000 CNY к базовой ставке за оформление без закрытия экспортной декларации (без возврата НДС для отправителя).");
+      }
       if (document.getElementById('check-adr').checked) { lines.push("* В ставку включёна стоимость автомобиля для перевозки опасных грузов (ADR)."); }
       if (document.getElementById('check-temperature').checked) { lines.push("* Автомобиль с температурным режимом и хранение на температурном складе включены в ставку."); }
       if (document.getElementById('check-stackable').checked) { lines.push("* Груз считался как штабелируемый."); }
@@ -216,6 +225,7 @@
       document.getElementById('check-dimensions').checked = false;
       document.getElementById('check-MZL').checked = false;
       document.getElementById('check-adr').checked = false;
+      document.getElementById('check-brand').checked = false;
       document.getElementById('check-adr9').checked = false;
       document.getElementById('check-delivery').checked = false;
       document.getElementById('check-stackable').checked = false;

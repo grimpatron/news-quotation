@@ -24,21 +24,49 @@
         <textarea id="row" class="mono"></textarea>
 
         <div class="addition">
-          <div class="addition-block">
-            <label><input type="checkbox" id="check-delivery">Довоз</label>
-            <label><input type="checkbox" id="check-MZL">Груз в Маньчжурии</label>
-            <label><input type="checkbox" id="check-brand">Бренд / сокрытие</label>
+          <div class="addition-block addition-block-x">
+            <h3 class="block-title">Опции груза</h3>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-dimensions">
+                <span class="checkbox-text">Нет точных размеров</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-stackable">
+                <span class="checkbox-text">Считал как штаб ✅</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-non-stackable">
+                <span class="checkbox-text">Считал как не штаб ❌</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-stackable-alt">
+                <span class="checkbox-text">Штаб / не штаб (2 цены)</span>
+              </label>
+            </div>
           </div>
-          <div class="addition-block">
+          <!-- <div class="addition-block">
             <label><input type="checkbox" id="check-dimensions">Нет точных размеров</label>
             <label><input type="checkbox" id="check-stackable">Считал как штаб (✅)</label>
             <label><input type="checkbox" id="check-non-stackable">Считал как не штаб (❌)</label>
+            <label><input type="checkbox" id="check-stackable-alt">Штаб / не штаб (2 цены)</label>
+          </div> -->
+          <div class="addition-block">
+            <label><input type="checkbox" id="check-delivery">Довоз нашей</label>
+            <!-- <label><input type="checkbox" id="check-delivery-another">Довоз отдельной</label> -->
+            <label><input type="checkbox" id="check-MZL">Груз в Маньчжурии</label>
+            <label><input type="checkbox" id="check-brand">Бренд / сокрытие</label>
           </div>
           <div class="addition-block">
             <label><input type="checkbox" id="check-adr">ADR авто (☢️)</label>
             <label><input type="checkbox" id="check-adr9">ADR груз (☢️) 2 цены</label>
             <label><input type="checkbox" id="check-temperature">Температурный режим (🌡️)</label>
           </div>
+        </div>
+
+        <div class="btns">
+          <button class="transform-button" onclick="transform()">Преобразовать</button>
+          <button class="reset-button" onclick="resetAll()">Сбросить</button>
           <div class="relevance-block">
             <span>Действие ставки: </span>
             <input class="relevance-radio" type="radio" name="relevance" id="one-day-relevance">
@@ -49,13 +77,8 @@
             <label class="relevance-label" for="five-day-relevance">5 дней</label>
             <input class="relevance-radio" type="radio" name="relevance" id="seven-day-relevance">
             <label class="relevance-label" for="seven-day-relevance">7 дней</label>
-            <label class="label-epi"><input type="checkbox" id="check-EPI" checked>Распределение расходов за ЭПИ</label>
+            <label class="label-epi"><input type="checkbox" id="check-EPI" checked>Расходы за ЭПИ</label>
           </div>
-        </div>
-
-        <div class="btns">
-          <button class="transform-button" onclick="transform()">Преобразовать</button>
-          <button class="reset-button" onclick="resetAll()">Сбросить</button>
         </div>
       </div>
     </section>
@@ -107,10 +130,7 @@
       }
     }
     function handlePrice(cell) { return cell }
-    function handleSvh(cell) {
-      // if (/СВХ/i.test(cell)) return cell.replace(/СВХ\s+Бобруйск/ig, 'СВХ Бобруйска');
-      return cell;
-    }
+    function handleSvh(cell) { return cell }
 
     function handleTransit(cell) {
       cell = cell.trim();
@@ -146,11 +166,13 @@
 
     // карта функций по индексам
     const cellHandlers = {
-      1: handleCode,     // ячейка №1 — номер запроса
-      6: handleCompany,  // ячейка №4 — заказчик
-      8: handleSvh,      // ячейка №6 — СВХ
-      16: handlePrice,   // ячейка №12 — цена
-      17: handleTransit  // ячейка №13 — транзит
+      1: handleCode,     // Номер запроса
+      6: handleCompany,  // Заказчик (клиент)
+      8: handleSvh,      // Место выгрузки (СВХ)
+      // 9: handleDeliver,  // Довоз
+      16: handlePrice,   // Ставка
+      17: handleTransit  // Транзитные сроки
+      // 21: // Данные груза 
     };
 
     function transform() {
@@ -184,6 +206,13 @@
           const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
           lines.push(`*${transitText}`);
         }
+      } else if (document.getElementById('check-stackable-alt').checked) {
+        const destTextOne = collected.svh ? `до ${collected.svh} (груз считался как штабелируемый)` : '';
+        const destTextTwo = collected.svh ? `до ${collected.svh} (груз считался как не штабелируемый)` : '';
+        lines.push(`${collected.price ? collected.price + ' USD' : ''} ${destTextOne}.`);
+        lines.push(`__ USD ${destTextTwo}.`);
+        const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
+        lines.push(`*${transitText}`);
       } else {
         if (collected.price || collected.svh || collected.transit) {
           const destText = collected.svh ? `до ${collected.svh}` : '';

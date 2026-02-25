@@ -56,6 +56,7 @@
             <!-- <label><input type="checkbox" id="check-delivery-another">Довоз отдельной</label> -->
             <label><input type="checkbox" id="check-MZL">Груз в Маньчжурии</label>
             <label><input type="checkbox" id="check-brand">Бренд / сокрытие</label>
+            <label><input type="checkbox" id="check-navigation">Навигационная пломба</label>
           </div>
           <div class="addition-block">
             <label><input type="checkbox" id="check-adr">ADR авто (☢️)</label>
@@ -229,6 +230,7 @@
       }
       if (document.getElementById('check-adr').checked) { lines.push("* В ставку включёна стоимость автомобиля для перевозки опасных грузов (ADR)."); }
       if (document.getElementById('check-temperature').checked) { lines.push("* Автомобиль с температурным режимом и хранение на температурном складе включены в ставку."); }
+      if (document.getElementById('check-navigation').checked) { lines.push("* Стоимость навигационной пломбы включена в ставку."); }
       if (document.getElementById('check-stackable').checked) { lines.push("* Груз считался как штабелируемый."); }
       if (document.getElementById('check-non-stackable').checked) { lines.push("* Груз считался как не штабелируемый."); }
       if (document.getElementById('check-MZL').checked) { lines.push("* Ставка действительна при условии доставки груза на склад нашего агента. Если необходим своз нашими силами, стоимость будет пересмотрена."); }
@@ -258,6 +260,7 @@
       document.getElementById('check-adr9').checked = false;
       document.getElementById('check-delivery').checked = false;
       document.getElementById('check-stackable').checked = false;
+      document.getElementById('check-navigation').checked = false;
       document.getElementById('check-temperature').checked = false;
       document.getElementById('check-non-stackable').checked = false;
       document.getElementById('row').focus();

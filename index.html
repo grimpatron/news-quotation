@@ -25,7 +25,7 @@
 
         <div class="addition">
           <div class="addition-block addition-block-x">
-            <h3 class="block-title">Опции груза</h3>
+            <h3 class="block-title">расчет ставки</h3>
             <div class="checkbox-group">
               <label class="checkbox-item">
                 <input type="checkbox" id="check-dimensions">
@@ -51,18 +51,55 @@
             <label><input type="checkbox" id="check-non-stackable">Считал как не штаб (❌)</label>
             <label><input type="checkbox" id="check-stackable-alt">Штаб / не штаб (2 цены)</label>
           </div> -->
-          <div class="addition-block">
-            <label><input type="checkbox" id="check-delivery">Довоз нашей</label>
-            <!-- <label><input type="checkbox" id="check-delivery-another">Довоз отдельной</label> -->
-            <label><input type="checkbox" id="check-MZL">Груз в Маньчжурии</label>
-            <label><input type="checkbox" id="check-brand">Бренд / сокрытие</label>
-            <label><input type="checkbox" id="check-navigation">Навигационная пломба</label>
+          <div class="addition-block addition-block-x">
+            <h3 class="block-title">опции автомобиля</h3>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-temperature">
+                <span class="checkbox-text">Температурный режим 🌡️</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-navigation">
+                <span class="checkbox-text">Навигационная пломба 🧭</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-adr">
+                <span class="checkbox-text">ADR авто ☢️</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-adr9">
+                <span class="checkbox-text">ADR авто ☢️ (2 цены)</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-delivery">
+                <span class="checkbox-text">Довоз нашей</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-delivery-another">
+                <span class="checkbox-text">Довоз отдельной</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-MZL">
+                <span class="checkbox-text">Груз в Маньчжурии</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="check-brand">
+                <span class="checkbox-text">Бренд / сокрытие</span>
+              </label>
+            </div>
           </div>
-          <div class="addition-block">
+          <!-- <div class="addition-block">
             <label><input type="checkbox" id="check-adr">ADR авто (☢️)</label>
             <label><input type="checkbox" id="check-adr9">ADR груз (☢️) 2 цены</label>
             <label><input type="checkbox" id="check-temperature">Температурный режим (🌡️)</label>
-          </div>
+            <label><input type="checkbox" id="check-navigation">Навигационная пломба</label>
+          </div> -->
+          <!-- <div class="addition-block">
+            <label><input type="checkbox" id="check-delivery">Довоз нашей</label>
+            <label><input type="checkbox" id="check-delivery-another">Довоз отдельной</label>
+            <label><input type="checkbox" id="check-MZL">Груз в Маньчжурии</label>
+            <label><input type="checkbox" id="check-brand">Бренд / сокрытие</label>
+          </div> -->
         </div>
 
         <div class="btns">
@@ -130,6 +167,7 @@
         return extractedText;
       }
     }
+    function handleDeliver(cell) { return cell.split('(')[0]; }
     function handlePrice(cell) { return cell }
     function handleSvh(cell) { return cell }
 
@@ -170,7 +208,7 @@
       1: handleCode,     // Номер запроса
       6: handleCompany,  // Заказчик (клиент)
       8: handleSvh,      // Место выгрузки (СВХ)
-      // 9: handleDeliver,  // Довоз
+      9: handleDeliver,  // Довоз
       16: handlePrice,   // Ставка
       17: handleTransit  // Транзитные сроки
       // 21: // Данные груза 
@@ -192,6 +230,7 @@
           if (idx === 1) collected.code = res;
           if (idx === 6) collected.company = res;
           if (idx === 8) collected.svh = res;
+          if (idx === 9) collected.delivery = res;
           if (idx === 16) collected.price = res;
           if (idx === 17) collected.transit = res;
         }
@@ -216,7 +255,8 @@
         lines.push(`*${transitText}`);
       } else {
         if (collected.price || collected.svh || collected.transit) {
-          const destText = collected.svh ? `до ${collected.svh}` : '';
+          const delivery = document.getElementById('check-delivery').checked || document.getElementById('check-delivery-another').checked ? " + довоз" : "";
+          const destText = collected.svh ? `до ${collected.svh}${delivery}` : '';
           const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
           lines.push(`${collected.price ? collected.price + ' USD' : ''} ${destText}.${transitText}`);
         }
@@ -234,7 +274,8 @@
       if (document.getElementById('check-stackable').checked) { lines.push("* Груз считался как штабелируемый."); }
       if (document.getElementById('check-non-stackable').checked) { lines.push("* Груз считался как не штабелируемый."); }
       if (document.getElementById('check-MZL').checked) { lines.push("* Ставка действительна при условии доставки груза на склад нашего агента. Если необходим своз нашими силами, стоимость будет пересмотрена."); }
-      if (document.getElementById('check-delivery').checked) { lines.push("* Стоимость довоза включена в ставку."); }
+      if (document.getElementById('check-delivery').checked) { lines.push(`* Стоимость довоза до ${collected.delivery} нашим автомобилем включена в ставку.`); }
+      if (document.getElementById('check-delivery-another').checked) { lines.push(`* Стоимость довоза до ${collected.delivery} отдельным автомобилем включена в ставку.`); }
 
 
       const selectedRadio = document.querySelector('input[name="relevance"]:checked');
@@ -253,16 +294,17 @@
 
     function resetAll() {
       document.getElementById('row').value = '';
-      document.getElementById('check-dimensions').checked = false;
       document.getElementById('check-MZL').checked = false;
       document.getElementById('check-adr').checked = false;
-      document.getElementById('check-brand').checked = false;
       document.getElementById('check-adr9').checked = false;
+      document.getElementById('check-brand').checked = false;
       document.getElementById('check-delivery').checked = false;
       document.getElementById('check-stackable').checked = false;
+      document.getElementById('check-dimensions').checked = false;
       document.getElementById('check-navigation').checked = false;
       document.getElementById('check-temperature').checked = false;
       document.getElementById('check-non-stackable').checked = false;
+      document.getElementById('check-delivery-another').checked = false;
       document.getElementById('row').focus();
       document.getElementById('out').textContent = 'Здесь появится текст.';
     }
@@ -292,7 +334,3 @@
 </body>
 
 </html>
-<!-- + добавить дату когда была дана ставка -->
-<!-- + quality of life (фокус на строке ввода, убрал alert) -->
-<!-- + добавить выбор шаблонов (АДР, РЕФ, Бренд, Довоз, Штаб) -->
-<!-- + добавить выбор сроки актуальности ставки -->

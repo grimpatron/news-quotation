@@ -5,7 +5,7 @@
   --border: #1f2937;
   /* --input: #0b1220; */
   --accent: #22c55e;
-  --block-bg: #34314233;
+  --block-bg: #30304050;
 }
 
 * {
@@ -23,7 +23,8 @@ body {
 body {
   min-height: 100vh;
   margin: 0;
-  background: linear-gradient(135deg, #f3e0c0 0%, #6b5b8f 100%);
+  background: linear-gradient(145deg, #c0f3e2 0%, #8f5b84 100%);
+  /* background: linear-gradient(135deg, #f3e0c0 0%, #6b5b8f 100%); */
   color: var(--text);
   font-family: Inter, system-ui, Arial, sans-serif;
 }
@@ -60,7 +61,7 @@ header p {
 
 .card header {
   color: white;
-  background-color: rgba(0, 0, 50, 0.5);
+  background-color: rgba(0, 15, 45, 0.55);
   padding: 12px 14px;
   border-bottom: 1px solid var(--border);
 }
@@ -87,8 +88,9 @@ header p {
 
 .addition-block-x {
   background-color: var(--block-bg);
-  padding: 2px 6px;
+  padding: 2px 4px;
   border-radius: 8px;
+  margin-bottom: 4px;
 }
 
 .addition-block label {
@@ -106,7 +108,7 @@ header p {
 
 label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: var(--muted);
   font-size: 13px;
 }
@@ -239,8 +241,8 @@ button.reset-button:hover {
 } */
 
 .block-title {
-  margin: 0 4px 4px;
-  font-size: 15px;
+  margin: 0 4px 2px;
+  font-size: 14px;
   font-weight: 600;
   color: #fff;
   /* color: #1e293b; */

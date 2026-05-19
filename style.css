@@ -1,9 +1,9 @@
 :root {
   /* --card: #111827; */
   /* --text: #e5e7eb; */
-  /* --muted: #9ca3af; */
+  --muted: #efefef;
   --border: #1f2937;
-  /* --input: #0b1220; */
+  --input: #ebebf0;
   --accent: #22c55e;
   --block-bg: #30304050;
 }
@@ -23,26 +23,10 @@ body {
 body {
   min-height: 100vh;
   margin: 0;
-  background: linear-gradient(145deg, #c0f3e2 0%, #8f5b84 100%);
+  background: linear-gradient(145deg, #c0d0e0 0%, #8f5b84 100%);
   /* background: linear-gradient(135deg, #f3e0c0 0%, #6b5b8f 100%); */
   color: var(--text);
   font-family: Inter, system-ui, Arial, sans-serif;
-}
-
-header {
-  padding: 18px;
-  border-bottom: 1px solid var(--border);
-}
-
-header h1 {
-  margin: 0;
-  font-size: 18px;
-}
-
-header p {
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 13px;
 }
 
 .container {
@@ -62,7 +46,7 @@ header p {
 .card header {
   color: white;
   background-color: rgba(0, 15, 45, 0.55);
-  padding: 12px 14px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -73,7 +57,7 @@ header p {
 
 .content {
   padding: 14px;
-  background-color: rgba(0, 0, 50, 0.35);
+  background-color: rgba(0, 5, 45, 0.4);
 }
 
 .addition {
@@ -106,11 +90,28 @@ header p {
   transition: all .3s;
 }
 
-label {
+.input-label {
   display: block;
   margin-bottom: 4px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.input-textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background-color: var(--input);
+  resize: none;
+}
+
+.output-preview {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background-color: var(--input);
+  white-space: pre-wrap;
+  line-height: 1.7;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  /* margin-top: 10px; */
+  padding: 12px;
 }
 
 textarea,
@@ -166,7 +167,6 @@ button.transform-button {
 
 button.transform-button:hover {
   --grad-color: #20b857;
-  /* меняем только переменную */
   transition: all .3s ease-in-out;
 }
 
@@ -180,21 +180,6 @@ button.reset-button:hover {
   background: #d1d1d1;
 }
 
-.preview {
-  white-space: pre-wrap;
-  line-height: 1.7;
-  background: var(--input);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  margin-top: 10px;
-}
-
-.mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  resize: none;
-  background-color: rgb(235, 235, 240);
-}
 
 .hint {
   color: var(--muted);
@@ -211,8 +196,8 @@ button.reset-button:hover {
   width: 100%;
   height: 36px;
   font-size: 14px;
-  /* padding: 20px 0 0; */
   margin-left: auto;
+  color: var(--muted);
 }
 
 .relevance-label {
@@ -220,7 +205,7 @@ button.reset-button:hover {
 }
 
 .relevance-radio {
-  margin: 0 0 0 10px;
+  margin: 0 2px 0 10px;
 }
 
 .label-epi {
@@ -245,7 +230,6 @@ button.reset-button:hover {
   font-size: 14px;
   font-weight: 600;
   color: #fff;
-  /* color: #1e293b; */
   /* padding-bottom: 8px;
   border-bottom: 2px solid #e9ecef; */
 }
@@ -269,6 +253,7 @@ button.reset-button:hover {
   border: 1px solid #e9ecef;
   transition: all 0.2s ease;
   cursor: pointer;
+  margin-bottom: 4px;
 }
 
 .checkbox-item:hover {
@@ -302,3 +287,9 @@ button.reset-button:hover {
   border-radius: 20px;
   background: #f1f5f9;
 }
+
+
+
+
+
+/* 310 строк */

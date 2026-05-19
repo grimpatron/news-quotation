@@ -10,9 +10,6 @@
 </head>
 
 <body>
-  <!-- <header>
-    <h1>Преобразование строки из таблицы → текст</h1>
-  </header> -->
 
   <div class="container">
     <section class="card">
@@ -20,8 +17,8 @@
         <h2>Входные данные</h2>
       </header>
       <div class="content">
-        <label>Вставьте сюда строку из таблицы Excel</label>
-        <textarea id="row" class="mono"></textarea>
+        <label class="input-label">Вставьте сюда строку из таблицы Excel</label>
+        <textarea id="row" class="input-textarea"></textarea>
 
         <div class="addition">
           <div class="addition-block addition-block-x">
@@ -45,12 +42,7 @@
               </label>
             </div>
           </div>
-          <!-- <div class="addition-block">
-            <label><input type="checkbox" id="check-dimensions">Нет точных размеров</label>
-            <label><input type="checkbox" id="check-stackable">Считал как штаб (✅)</label>
-            <label><input type="checkbox" id="check-non-stackable">Считал как не штаб (❌)</label>
-            <label><input type="checkbox" id="check-stackable-alt">Штаб / не штаб (2 цены)</label>
-          </div> -->
+
           <div class="addition-block addition-block-x">
             <h3 class="block-title">опции автомобиля</h3>
             <div class="checkbox-group">
@@ -88,18 +80,6 @@
               </label>
             </div>
           </div>
-          <!-- <div class="addition-block">
-            <label><input type="checkbox" id="check-adr">ADR авто (☢️)</label>
-            <label><input type="checkbox" id="check-adr9">ADR груз (☢️) 2 цены</label>
-            <label><input type="checkbox" id="check-temperature">Температурный режим (🌡️)</label>
-            <label><input type="checkbox" id="check-navigation">Навигационная пломба</label>
-          </div> -->
-          <!-- <div class="addition-block">
-            <label><input type="checkbox" id="check-delivery">Довоз нашей</label>
-            <label><input type="checkbox" id="check-delivery-another">Довоз отдельной</label>
-            <label><input type="checkbox" id="check-MZL">Груз в Маньчжурии</label>
-            <label><input type="checkbox" id="check-brand">Бренд / сокрытие</label>
-          </div> -->
         </div>
 
         <div class="btns">
@@ -115,7 +95,7 @@
             <label class="relevance-label" for="five-day-relevance">5 дней</label>
             <input class="relevance-radio" type="radio" name="relevance" id="seven-day-relevance">
             <label class="relevance-label" for="seven-day-relevance">7 дней</label>
-            <label class="label-epi"><input type="checkbox" id="check-EPI" checked>Расходы за ЭПИ</label>
+            <label class="label-epi"><input type="checkbox" id="check-EPI">Расходы за ЭПИ</label>
           </div>
         </div>
       </div>
@@ -126,7 +106,7 @@
         <h2>Результат</h2>
       </header>
       <div class="content">
-        <div id="out" class="preview mono">Здесь появится текст.</div>
+        <div id="out" class="output-preview">Здесь появится текст.</div>
         <div class="btns"><button onclick="copyOut()">Копировать</button></div>
       </div>
     </section>
@@ -158,7 +138,7 @@
     }
 
     // --- обработчики для конкретных ячеек ---
-    function handleCode(cell) { return /^\d{1,2}-\d{1,2}$/.test(cell) ? cell : ''; }
+    function handleCode(cell) { return cell }
     function handleCompany(cell) {
       const matches = cell.match(/\((.*?)\)/g);
 
@@ -169,6 +149,7 @@
     }
     function handleDeliver(cell) { return cell.split('(')[0]; }
     function handlePrice(cell) { return cell }
+    function handleFrom(cell) { return cell }
     function handleSvh(cell) { return cell }
 
     function handleTransit(cell) {
@@ -194,7 +175,6 @@
 
     function getTodayDate() {
       const today = new Date();
-
       const day = String(today.getDate()).padStart(2, '0');
       const month = String(today.getMonth() + 1).padStart(2, '0');
       const year = today.getFullYear();
@@ -205,13 +185,14 @@
 
     // карта функций по индексам
     const cellHandlers = {
-      1: handleCode,     // Номер запроса
-      6: handleCompany,  // Заказчик (клиент)
-      8: handleSvh,      // Место выгрузки (СВХ)
-      9: handleDeliver,  // Довоз
-      16: handlePrice,   // Ставка
-      17: handleTransit  // Транзитные сроки
-      // 21: // Данные груза 
+      3: handleCode,      // Номер запроса
+      7: handleCompany,   // Заказчик (клиент)
+      8: handleFrom,      // Место загрузки
+      9: handleSvh,       // Место выгрузки (СВХ)
+      10: handleDeliver,  // Довоз
+      18: handlePrice,    // Ставка
+      19: handleTransit   // Транзитные сроки
+      // 23: handleCargoData // Данные груза 
     };
 
     function transform() {
@@ -227,17 +208,19 @@
       parts.forEach((cell, idx) => {
         if (cellHandlers[idx]) {
           const res = cellHandlers[idx](cell);
-          if (idx === 1) collected.code = res;
-          if (idx === 6) collected.company = res;
-          if (idx === 8) collected.svh = res;
-          if (idx === 9) collected.delivery = res;
-          if (idx === 16) collected.price = res;
-          if (idx === 17) collected.transit = res;
+          if (idx === 3) collected.code = res;
+          if (idx === 7) collected.company = res;
+          if (idx === 8) collected.from = res;
+          if (idx === 9) collected.svh = res;
+          if (idx === 10) collected.delivery = res;
+          if (idx === 18) collected.price = res;
+          if (idx === 19) collected.transit = res;
         }
       });
 
       const lines = [];
-      if (collected.code) lines.push(`${collected.code} (${collected.company})`);
+      // if (collected.code) lines.push(`${collected.code} (${collected.company})`);
+      if (collected.code) lines.push(`║ ${collected.code}`);
       if (document.getElementById('check-adr9').checked) {
         if (collected.price || collected.svh || collected.transit) {
           const destText = collected.svh ? `до ${collected.svh}` : '';
@@ -256,15 +239,14 @@
       } else {
         if (collected.price || collected.svh || collected.transit) {
           const delivery = document.getElementById('check-delivery').checked || document.getElementById('check-delivery-another').checked ? " + довоз" : "";
+          const fromText = collected.from ? `из ${collected.from}` : '';
           const destText = collected.svh ? `до ${collected.svh}${delivery}` : '';
           const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
-          lines.push(`${collected.price ? collected.price + ' USD' : ''} ${destText}.${transitText}`);
+          lines.push(`${collected.price ? collected.price + ' USD нетто' : ''} ${fromText} ${destText}.${transitText}`);
         }
       }
       if (document.getElementById('check-dimensions').checked) { lines.push("* Ставка ориентировочная, так как нет точных размеров груза. Когда появятся размеры, ставка будет пересчитана."); }
       if (document.getElementById('check-brand').checked) {
-        // lines.push("* +20000 CNY к текущей ставке за оформление официальной лицензии, если отправителю необходимо вернуть НДС.");
-        // lines.push("* +3000 CNY к текущей ставке за сокрытие экспортной декларации, если отправитель согласен не возвращать налог.");
         lines.push("* + 20 000 CNY к базовой ставке за оформление экспортной лицензии (с возмещением НДС для отправителя).");
         lines.push("* + 3 000 CNY к базовой ставке за оформление без закрытия экспортной декларации (без возврата НДС для отправителя).");
       }
@@ -303,6 +285,7 @@
       document.getElementById('check-dimensions').checked = false;
       document.getElementById('check-navigation').checked = false;
       document.getElementById('check-temperature').checked = false;
+      document.getElementById('check-stackable-alt').checked = false;
       document.getElementById('check-non-stackable').checked = false;
       document.getElementById('check-delivery-another').checked = false;
       document.getElementById('row').focus();
@@ -334,3 +317,4 @@
 </body>
 
 </html>
+<!-- 320 строк -->

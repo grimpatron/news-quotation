@@ -107,7 +107,7 @@
       </header>
       <div class="content">
         <div id="out" class="output-preview">Здесь появится текст.</div>
-        <div class="btns"><button onclick="copyOut()">Копировать</button></div>
+        <div class="btns"><button class="copy-button" onclick="copyOut()">Копировать</button></div>
       </div>
     </section>
   </div>
@@ -143,8 +143,9 @@
       const matches = cell.match(/\((.*?)\)/g);
 
       if (matches) {
-        const extractedText = matches.map(m => m.slice(1, -1)); // Убираем скобки
-        return extractedText;
+        // const extractedText = matches.map(m => m.slice(1, -1)); // Убираем скобки
+        // return extractedText;
+        return matches.map(m => m.slice(1, -1)); // Убираем скобки
       }
     }
     function handleDeliver(cell) { return cell.split('(')[0]; }
@@ -178,10 +179,8 @@
       const day = String(today.getDate()).padStart(2, '0');
       const month = String(today.getMonth() + 1).padStart(2, '0');
       const year = today.getFullYear();
-
       return `${day}.${month}.${year}`;
     }
-
 
     // карта функций по индексам
     const cellHandlers = {
@@ -191,7 +190,7 @@
       9: handleSvh,       // Место выгрузки (СВХ)
       10: handleDeliver,  // Довоз
       18: handlePrice,    // Ставка
-      19: handleTransit   // Транзитные сроки
+      20: handleTransit   // Транзитные сроки
       // 23: handleCargoData // Данные груза 
     };
 
@@ -208,19 +207,19 @@
       parts.forEach((cell, idx) => {
         if (cellHandlers[idx]) {
           const res = cellHandlers[idx](cell);
-          if (idx === 3) collected.code = res;
-          if (idx === 7) collected.company = res;
+          if (idx === 3) collected.requestNumber = res;
+          if (idx === 7) collected.company = res; // временно не использую.
           if (idx === 8) collected.from = res;
           if (idx === 9) collected.svh = res;
           if (idx === 10) collected.delivery = res;
           if (idx === 18) collected.price = res;
-          if (idx === 19) collected.transit = res;
+          if (idx === 20) collected.transit = res;
         }
       });
 
       const lines = [];
-      // if (collected.code) lines.push(`${collected.code} (${collected.company})`);
-      if (collected.code) lines.push(`║ ${collected.code}`);
+      // if (collected.requestNumber) lines.push(`${collected.requestNumber} (${collected.company})`);
+      if (collected.requestNumber) lines.push(`║ ${collected.requestNumber} ║`);
       if (document.getElementById('check-adr9').checked) {
         if (collected.price || collected.svh || collected.transit) {
           const destText = collected.svh ? `до ${collected.svh}` : '';
@@ -318,3 +317,6 @@
 
 </html>
 <!-- 320 строк -->
+<!-- лишний пробел в строке довоз до "город" -->
+<!-- + Сделать новые красивые кнопки (универсальные) -->
+<!-- Добавить фавиконку -->

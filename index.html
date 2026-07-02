@@ -226,7 +226,7 @@
           lines.push(`${collected.price ? collected.price + ' USD' : ''} ${destText} если упаковка груза имеет знаки, обозначающие что груз опасный, в таком случае необходим ADR автомобиль по Китаю.`);
           lines.push(`__ USD ${destText} если упаковка груза не имеет знаков, обозначающих что груз опасный, в таком случае китайский своз можем сделать в обычном авто.`);
           // const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
-          lines.push(`*${transitText}`);
+          // lines.push(`*${transitText}`);
         }
       } else if (document.getElementById('check-stackable-alt').checked) {
         const destTextOne = collected.svh ? `до ${collected.svh} (груз считался как штабелируемый)` : '';
@@ -234,14 +234,15 @@
         lines.push(`${collected.price ? collected.price + ' USD' : ''} ${destTextOne}.`);
         lines.push(`__ USD ${destTextTwo}.`);
         // const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
-        lines.push(`*${transitText}`);
+        // lines.push(`*${transitText}`);
       } else {
         if (collected.price || collected.svh || collected.transit) {
           const delivery = document.getElementById('check-delivery').checked || document.getElementById('check-delivery-another').checked ? " + довоз" : "";
           const fromText = collected.from ? `из ${collected.from}` : '';
           const destText = collected.svh ? `до ${collected.svh}${delivery}` : '';
           // const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
-          lines.push(`${collected.price ? collected.price + ' USD нетто' : ''} ${fromText} ${destText}.${transitText}`);
+          // lines.push(`${collected.price ? collected.price + ' USD нетто' : ''} ${fromText} ${destText}.${transitText}`);
+          lines.push(`${collected.price ? collected.price + ' USD нетто' : ''} ${fromText} ${destText}.`);
         }
       }
       lines.push(` Транзитные сроки ${collected.transit}. Информируем вас, что из-за текущей ситуации на топливном рынке России возможны задержки в доставке грузов.`)

@@ -245,7 +245,7 @@
           lines.push(`${collected.price ? collected.price + ' USD нетто' : ''} ${fromText} ${destText}.`);
         }
       }
-      lines.push(` Транзитные сроки ${collected.transit}. Информируем вас, что из-за текущей ситуации на топливном рынке России возможны задержки в доставке грузов.`)
+      lines.push(`* Транзитные сроки ${collected.transit}. Информируем вас, что из-за текущей ситуации на топливном рынке России возможны задержки в доставке грузов.`)
       if (document.getElementById('check-dimensions').checked) { lines.push("* Ставка ориентировочная, так как нет точных размеров груза. Когда появятся размеры, ставка будет пересчитана."); }
       if (document.getElementById('check-brand').checked) {
         lines.push("* + 20 000 CNY к базовой ставке за оформление экспортной лицензии (с возмещением НДС для отправителя).");

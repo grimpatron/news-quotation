@@ -143,8 +143,6 @@
       const matches = cell.match(/\((.*?)\)/g);
 
       if (matches) {
-        // const extractedText = matches.map(m => m.slice(1, -1)); // Убираем скобки
-        // return extractedText;
         return matches.map(m => m.slice(1, -1)); // Убираем скобки
       }
     }
@@ -192,6 +190,8 @@
       19: handlePrice,    // Ставка
       21: handleTransit   // Транзитные сроки
       // 23: handleCargoData // Данные груза 
+      // 24: handleCargoData // Вес груза 
+      // 25: handleCargoData // Объём груза 
     };
 
     function transform() {
@@ -245,7 +245,7 @@
           lines.push(`${collected.price ? collected.price + ' USD нетто' : ''} ${fromText} ${destText}.`);
         }
       }
-      lines.push(`* Транзитные сроки ${collected.transit}. Информируем вас, что из-за текущей ситуации на топливном рынке России возможны задержки в доставке грузов.`)
+      lines.push(`* Транзитные сроки ${collected.transit}.`)
       if (document.getElementById('check-dimensions').checked) { lines.push("* Ставка ориентировочная, так как нет точных размеров груза. Когда появятся размеры, ставка будет пересчитана."); }
       if (document.getElementById('check-brand').checked) {
         lines.push("* + 20 000 CNY к базовой ставке за оформление экспортной лицензии (с возмещением НДС для отправителя).");

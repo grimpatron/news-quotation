@@ -22,7 +22,7 @@
 
         <div class="addition">
           <div class="addition-block addition-block-x">
-            <h3 class="block-title">расчет ставки</h3>
+            <h3 class="block-title">расчет цены груза</h3>
             <div class="checkbox-group">
               <label class="checkbox-item">
                 <input type="checkbox" id="check-dimensions">
@@ -63,12 +63,12 @@
                 <span class="checkbox-text">ADR авто ☢️ (2 цены)</span>
               </label>
               <label class="checkbox-item">
-                <input type="checkbox" id="check-delivery">
-                <span class="checkbox-text">Довоз нашей</span>
+                <input type="checkbox" id="check-delivery-another">
+                <span class="checkbox-text">Довоз</span>
               </label>
               <label class="checkbox-item">
-                <input type="checkbox" id="check-delivery-another">
-                <span class="checkbox-text">Довоз отдельной</span>
+                <input type="checkbox" id="check-delivery-our">
+                <span class="checkbox-text">Довоз тем же авто</span>
               </label>
               <label class="checkbox-item">
                 <input type="checkbox" id="check-MZL">
@@ -141,10 +141,7 @@
     function handleCode(cell) { return cell }
     function handleCompany(cell) {
       const matches = cell.match(/\((.*?)\)/g);
-
-      if (matches) {
-        return matches.map(m => m.slice(1, -1)); // Убираем скобки
-      }
+      if (matches) { return matches.map(m => m.slice(1, -1)); }
     }
     function handleDeliver(cell) { return cell.split('(')[0]; }
     function handlePrice(cell) { return cell }
@@ -237,7 +234,7 @@
         // lines.push(`*${transitText}`);
       } else {
         if (collected.price || collected.svh || collected.transit) {
-          const delivery = document.getElementById('check-delivery').checked || document.getElementById('check-delivery-another').checked ? " + довоз" : "";
+          const delivery = document.getElementById('check-delivery-our').checked || document.getElementById('check-delivery-another').checked ? " + довоз" : "";
           const fromText = collected.from ? `из ${collected.from}` : '';
           const destText = collected.svh ? `до ${collected.svh}${delivery}` : '';
           // const transitText = collected.transit ? ` Транзитные сроки ${collected.transit}.` : '';
@@ -257,8 +254,8 @@
       if (document.getElementById('check-stackable').checked) { lines.push("* Груз считался как штабелируемый."); }
       if (document.getElementById('check-non-stackable').checked) { lines.push("* Груз считался как не штабелируемый."); }
       if (document.getElementById('check-MZL').checked) { lines.push("* Ставка действительна при условии доставки груза на склад нашего агента. Если необходим своз нашими силами, стоимость будет пересмотрена."); }
-      if (document.getElementById('check-delivery').checked) { lines.push(`* Стоимость довоза до ${collected.delivery} нашим автомобилем включена в ставку.`); }
-      if (document.getElementById('check-delivery-another').checked) { lines.push(`* Стоимость довоза до ${collected.delivery} отдельным автомобилем включена в ставку.`); }
+      if (document.getElementById('check-delivery-another').checked) { lines.push(`* Стоимость довоза до ${collected.delivery} включена в ставку.`); }
+      if (document.getElementById('check-delivery-our').checked) { lines.push(`* Стоимость довоза до ${collected.delivery} нашим автомобилем включена в ставку.`); }
 
 
       const selectedRadio = document.querySelector('input[name="relevance"]:checked');
@@ -281,11 +278,11 @@
       document.getElementById('check-adr').checked = false;
       document.getElementById('check-adr9').checked = false;
       document.getElementById('check-brand').checked = false;
-      document.getElementById('check-delivery').checked = false;
       document.getElementById('check-stackable').checked = false;
       document.getElementById('check-dimensions').checked = false;
       document.getElementById('check-navigation').checked = false;
       document.getElementById('check-temperature').checked = false;
+      document.getElementById('check-delivery-our').checked = false;
       document.getElementById('check-stackable-alt').checked = false;
       document.getElementById('check-non-stackable').checked = false;
       document.getElementById('check-delivery-another').checked = false;
@@ -320,6 +317,5 @@
 </html>
 <!-- 320 строк -->
 <!-- лишний пробел в строке довоз до "город" -->
-<!-- + Сделать новые красивые кнопки (универсальные) -->
 <!-- Добавить фавиконку -->
 <!-- Параметры груза по которым производился расчёт -->
